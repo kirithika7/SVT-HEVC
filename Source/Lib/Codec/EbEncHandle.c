@@ -3044,6 +3044,11 @@ static EB_ERRORTYPE VerifySettings(\
         return_error = EB_ErrorBadParameter;
     }
 
+    if (config->lowLevelVbv > 1) {
+        SVT_LOG("SVT [Error]: Instance %u : Invalid lowLevelVbv flag [0 - 1]\n", channelNumber + 1);
+        return_error = EB_ErrorBadParameter;
+    }
+
     if (config->tileColumnCount < 1 || config->tileColumnCount > 20) {
         SVT_LOG("SVT [Error]: Instance %u : Invalid tile column count\n", channelNumber + 1);
         return_error = EB_ErrorBadParameter;

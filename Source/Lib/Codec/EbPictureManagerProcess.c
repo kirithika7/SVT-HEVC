@@ -769,7 +769,7 @@ void* PictureManagerKernel(void *inputPtr)
 
                     // Rate Control 
 
-                    ChildPictureControlSetPtr->useDeltaQp =  (EB_U8)(entrySequenceControlSetPtr->staticConfig.improveSharpness || entrySequenceControlSetPtr->staticConfig.bitRateReduction);
+					ChildPictureControlSetPtr->useDeltaQp = (EB_U8)(entrySequenceControlSetPtr->staticConfig.improveSharpness || entrySequenceControlSetPtr->staticConfig.bitRateReduction ||(sequenceControlSetPtr->staticConfig.vbvBufsize && sequenceControlSetPtr->staticConfig.vbvMaxrate && sequenceControlSetPtr->staticConfig.lowLevelVbv));
 
                     // Check resolution
                     if (entrySequenceControlSetPtr->inputResolution < INPUT_SIZE_1080p_RANGE)
