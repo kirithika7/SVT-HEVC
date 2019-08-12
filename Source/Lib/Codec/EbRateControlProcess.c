@@ -2355,6 +2355,7 @@ void* RateControlKernel(void *inputPtr)
     EB_U32                       bestOisCuIndex = 0;
 
     RATE_CONTROL_TASKTYPES       taskType;
+    HlRateControlHistogramEntry_t      *hlRateControlHistogramPtrTemp;
 
     for (;;) {
 
@@ -2601,11 +2602,13 @@ void* RateControlKernel(void *inputPtr)
                         pictureControlSetPtr->pictureQp);
                 }
             }
-            if (encodeContextPtr->vbvMaxrate && encodeContextPtr->vbvBufsize && sequenceControlSetPtr->staticConfig.lookAheadDistance > 0)
-            {
+            if (encodeContextPtr->vbvMaxrate && encodeContextPtr->vbvBufsize && sequenceControlSetPtr->staticConfig.lookAheadDistance > 0) {
                 EbBlockOnMutex(encodeContextPtr->bufferFillMutex);
+                pictureControlSetPtr->qpNoVbv = pictureControlSetPtr->pictureQp;
+                pictureControlSetPtr->bufferFillPerFrame = encodeContextPtr->bufferFill;
                 pictureControlSetPtr->pictureQp = (EB_U8)Vbv_Buf_Calc(pictureControlSetPtr, sequenceControlSetPtr, encodeContextPtr);
-
+                hlRateControlHistogramPtrTemp = encodeContextPtr->hlRateControlHistorgramQueue[pictureControlSetPtr->ParentPcsPtr->hlHistogramQueueIndex];
+                pictureControlSetPtr->frameSizePlanned = predictBits(sequenceControlSetPtr, encodeContextPtr, hlRateControlHistogramPtrTemp, pictureControlSetPtr->pictureQp);
                 EbReleaseMutex(encodeContextPtr->bufferFillMutex);
             }
             pictureControlSetPtr->ParentPcsPtr->pictureQp = pictureControlSetPtr->pictureQp;
