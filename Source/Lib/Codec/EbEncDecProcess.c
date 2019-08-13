@@ -4015,7 +4015,6 @@ void* EncDecKernel(void *inputPtr)
     // LCU Loop variables  
     LargestCodingUnit_t    *lcuPtr;
     EB_U16                  lcuIndex;
-    EB_U16                  rowIndex;
     EB_U8                   lcuSize;
     EB_U8                   lcuSizeLog2;
     EB_U32                  xLcuIndex;
@@ -4199,9 +4198,6 @@ void* EncDecKernel(void *inputPtr)
                     // LCU per picture-wise
                     lcuIndex = (EB_U16)((tileGroupLcuStartY + yLcuIndex) * pictureWidthInLcu + (tileGroupLcuStartX + xLcuIndex));
                     lcuPtr = pictureControlSetPtr->lcuPtrArray[lcuIndex];
-                    rowIndex = (EB_U16)(yLcuIndex / pictureHeightInLcu);
-                    rowPtr = pictureControlSetPtr->rowStats[rowIndex];
-
                     lcuOriginX = (xLcuIndex+tileGroupLcuStartX) << lcuSizeLog2;
                     lcuOriginY = (yLcuIndex+tileGroupLcuStartY) << lcuSizeLog2;
                     //printf("Process lcu (%d, %d), lcuIndex %d, segmentIndex %d\n", lcuOriginX, lcuOriginY, lcuIndex, segmentIndex);
