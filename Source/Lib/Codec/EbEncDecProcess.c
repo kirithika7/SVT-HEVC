@@ -4223,7 +4223,6 @@ void* EncDecKernel(void *inputPtr)
                     lcuRowIndexCount = (xLcuIndex == tileRowWidthInLcu - 1) ? lcuRowIndexCount + 1 : lcuRowIndexCount;
                     mdcPtr = &pictureControlSetPtr->mdcLcuArray[lcuIndex];
                     contextPtr->lcuIndex = lcuIndex;
-                    tempCoeffPicturePtr = lcuPtr->quantizedCoeff;
 
                     // Derive cuUseRefSrcFlag Flag
                     contextPtr->mdContext->cuUseRefSrcFlag = (pictureControlSetPtr->ParentPcsPtr->useSrcRef) && (pictureControlSetPtr->ParentPcsPtr->edgeResultsPtr[lcuIndex].edgeBlockNum == EB_FALSE || pictureControlSetPtr->ParentPcsPtr->lcuFlatNoiseArray[lcuIndex]) ? EB_TRUE : EB_FALSE;
@@ -4387,6 +4386,7 @@ void* EncDecKernel(void *inputPtr)
                             contextPtr);
                     if (sequenceControlSetPtr->staticConfig.lowLevelVbv) {
                         /*Entropy Estimation for LCU*/
+					    tempCoeffPicturePtr = lcuPtr->quantizedCoeff;
                         tempWrittenBitsBeforeQuantizedCoeff = ((OutputBitstreamUnit_t*)EntropyCoderGetBitstreamPtr(pictureControlSetPtr->entropyCodingInfo[contextPtr->tileIndex]->tempEntropyCoderPtr))->writtenBitsCount +
                             32 - ((CabacEncodeContext_t*)pictureControlSetPtr->entropyCodingInfo[contextPtr->tileIndex]->tempEntropyCoderPtr->cabacEncodeContextPtr)->bacEncContext.bitsRemainingNum +
                             (((CabacEncodeContext_t*)pictureControlSetPtr->entropyCodingInfo[contextPtr->tileIndex]->tempEntropyCoderPtr->cabacEncodeContextPtr)->bacEncContext.tempBufferedBytesNum << 3);
